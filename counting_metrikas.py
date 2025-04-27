@@ -30,16 +30,13 @@ def slice_list():
     return sliced
 
 # функция для подсчета среднего значения на полученном спсике метрики со срезом
-def count_avg_sliced_metrika():
-    avg_sliced_metrika = sum(slice_list()) / len(slice_list()) # считаем среднее значение списка метрик со срезом
+def count_avg_sliced_metrika(sliced):
+    avg_sliced_metrika = sum(sliced) / len(sliced) # считаем среднее значение списка метрик со срезом
     return avg_sliced_metrika
 
 # функция для подсчета среднего значения на полученном спсике метрики без среза
 def count_avg_metrika():
-    sum_avg_metrika = 0
-    for avg_rps_int in real_rps_values: # цикл для подсчета суммы значений метрик
-            sum_avg_metrika += avg_rps_int # суммируем значения в цикле
-    avg_metrika = sum_avg_metrika / len(real_rps_values) # считаем среднее значение обычного списка метрик
+    avg_metrika = sum(real_rps_values) / len(real_rps_values) # считаем среднее значение обычного списка метрик
     return avg_metrika
 
 # считаем частоты полученных значений
@@ -97,7 +94,7 @@ while True:
         print(f"Список частот после среза выглядит вот так {sliced_frequency_for_print}")     
         
         #задаем в список значения среза для средней метрики из функции
-        avg_sliced_metrika = count_avg_sliced_metrika()
+        avg_sliced_metrika = count_avg_sliced_metrika(sliced)
         print("Среднее значение метрики среза:", avg_sliced_metrika)
         
         # считаем медианное значение для списка метрик среза 
@@ -139,5 +136,3 @@ while True:
     else: # если пользовательский ввод не валиден - сообщаем об этом
             print("Валидация не пройдена, используйте числа") 
             print (f"Список состои из {real_rps_values}")
-
-
