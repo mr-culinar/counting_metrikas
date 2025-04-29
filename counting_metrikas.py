@@ -1,8 +1,11 @@
+# TO DO: Оптимизации - переписать функции, обеспечить изоляцию
+# TO DO: реализовать main функцию
+# TO DO: try except
+
+
 # метрики от системы мониторинга (кортеж)
 rps_values = (5081, '17184', 10968, 9666, '9102', 12321, '10617', 11633, 5035, 9554, '10424', 9378, '8577', '11602', 14116, '8066', '11977', '8572', 9685, 11062, '10561', '17820', 16637, 5890, 17180, '17511', '13203', 13303, '7330', 7186, '10213', '8063', '12283', 15564, 17664, '8996', '12179', '13657', 15817, '16187', '6381', 8409, '5177', 17357, '10814', 6679, 12241, '6556', 12913, 16454, '17589', 5292, '13639', '7335', '11531', '14346', 7493, 15850, '12791', 11288)
 
-real_rps_values = [] # список для хранения преобразованных из кортежа строк в числа
-temp_real_int_value = 0 # операнд для временного хранения переменной числа в цикле
 user_metrika = None # переменная пользовательского ввода
 temp_slices_list = [] # список для манипуляций с приведением пользовательского запроса на срез в числовой вид 
 sliced = [] # список для которого уже была применена операция среза
@@ -12,14 +15,11 @@ temp_dict_for_count_frequency = {}
 temp_list_for_count_median = []
 
 # функция для преобразования кортежа в список с числами, возвращает список чисел
-def represent_tuple_as_int_list():
-    for real_int in rps_values: # цикл для преобразования строк в числа и добавление в список
-        temp_real_int_value = int(real_int) # из строки в число
-        real_rps_values.append(temp_real_int_value)  # добавляем число в список
-    return real_rps_values
+def represent_tuple_as_int_list(rps_values):
+    return [int (value) for value in rps_values]
 
 # инициализируем наш список функцией
-represent_tuple_as_int_list()
+real_rps_values = represent_tuple_as_int_list(rps_values)
 print("Предустановленный список со значениями метрики:\n", real_rps_values) # вывод для проверки, что сформирован список с числами
 
 # функция для среза по пользовательскому вводу, возвращает список подтвергшийся операции среза
@@ -57,9 +57,9 @@ def count_median(temp_list_for_count_median):
 
 # принимаем решение, какая же была нагрузка
 def check_load(metrika_for_determine_load, median):
-    if metrika_for_determine_load >= median * 0.25:
+    if metrika_for_determine_load >= median * 1.25:
         return "Ебучие скачки"
-    elif metrika_for_determine_load <= median * 0.25:
+    elif metrika_for_determine_load <= median * 0.75:
         return "Охуительные снижения"
     else:
         return "Дохуя стабильная"
@@ -136,3 +136,5 @@ while True:
     else: # если пользовательский ввод не валиден - сообщаем об этом
             print("Валидация не пройдена, используйте числа") 
             print (f"Список состои из {real_rps_values}")
+
+
