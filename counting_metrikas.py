@@ -11,7 +11,6 @@ temp_slices_list = [] # список для манипуляций с приве
 sliced = [] # список для которого уже была применена операция среза
 left_slice = None # число, означающее левый срез
 right_slice = None # число, означающее правый срез
-temp_dict_for_count_frequency = {}
 temp_list_for_count_median = []
 
 # функция для преобразования кортежа в список с числами, возвращает список чисел
@@ -29,20 +28,15 @@ def slice_list():
     sliced = real_rps_values[left_slice:right_slice] # sliced = список подвергшийся операции среза, делаем срез и сохраняем в список sliced
     return sliced
 
-# функция для подсчета среднего значения на полученном спсике метрики со срезом
-def count_avg_sliced_metrika(sliced):
-    avg_sliced_metrika = sum(sliced) / len(sliced) # считаем среднее значение списка метрик со срезом
+# функция для подсчета среднего значения на полученном спсике метрики со срезом и без среза
+def count_avg_metrika(data_for_counting_sum):
+    avg_sliced_metrika = sum(data_for_counting_sum) / len(data_for_counting_sum) # считаем среднее значение списка метрик со срезом
     return avg_sliced_metrika
 
-# функция для подсчета среднего значения на полученном спсике метрики без среза
-def count_avg_metrika():
-    avg_metrika = sum(real_rps_values) / len(real_rps_values) # считаем среднее значение обычного списка метрик
-    return avg_metrika
-
 # считаем частоты полученных значений
-def count_frequency(temp_dict_for_count_frequency):
+def count_frequency(data_for_count_frequency):
     frequency = {}
-    for value in temp_dict_for_count_frequency: # для каждого элемента списка real_rps_values
+    for value in data_for_count_frequency: # для каждого элемента списка real_rps_values
         if value in frequency: # проверка для каждого значения словаря
             frequency[value] += 1 # если есть в словаре - добавляем ключ и плюсуем единицу (считаем кол-во вхождений)
         else:
@@ -84,21 +78,19 @@ while True:
         temp_slices_list.extend(map(int, user_metrika.strip("[]").split(","))) # убираем [] из строки, разделяем числа через ",", добавляем в список условий для среза, предварительно приведя к int
         
         #задаем в переменные значения в список полученные через вызов функции подготовки списка со срезом 
-        sliced = slice_list()
+        data_for_counting_sum = slice_list()
        
         #задаем частоты полученных значений
-        temp_dict_for_count_frequency = sliced #временный список для обхода внутри функции
-        print ("temp_dict_for_count_frequency", temp_dict_for_count_frequency)
-        sliced_frequency_for_print = count_frequency(temp_dict_for_count_frequency)
-        print(f"Список значений метрик после среза выглядит вот так {temp_dict_for_count_frequency }")
+        sliced_frequency_for_print = count_frequency(data_for_counting_sum)
+        print(f"Список значений метрик после среза выглядит вот так {data_for_counting_sum }")
         print(f"Список частот после среза выглядит вот так {sliced_frequency_for_print}")     
         
         #задаем в список значения среза для средней метрики из функции
-        avg_sliced_metrika = count_avg_sliced_metrika(sliced)
+        avg_sliced_metrika = count_avg_metrika(data_for_counting_sum)
         print("Среднее значение метрики среза:", avg_sliced_metrika)
         
         # считаем медианное значение для списка метрик среза 
-        temp_list_for_count_median = sliced
+        temp_list_for_count_median = data_for_counting_sum
         median = count_median(temp_list_for_count_median)
         print ("Медианное значение метрики среза: ", median)
         
@@ -114,8 +106,12 @@ while True:
         sum_avg_metrika = 0 # сумма для расчета среднего значения
         
         # считаем среднее значение без среза
-        avg_metrika = count_avg_metrika()
+      #  data_for_counting_sum = real_rps_values
+        avg_metrika = count_avg_metrika(real_rps_values)
         print("Среднее значение метрики без среза:", avg_metrika)
+
+       # avg_metrika = count_avg_metrika(data_for_counting_sum)
+        #print("Среднее значение метрики без среза:", avg_metrika)
         
         # считаем медианное значение для обычного списка метрик (без среза)
         temp_list_for_count_median = real_rps_values
@@ -123,8 +119,7 @@ while True:
         print ("Медианное значение метрики без среза: ", median)
 
         #Считаем частоты полученных значений (без среза)
-        temp_dict_for_count_frequency = real_rps_values #временный список для обхода внутри функции
-        frequency_for_print = count_frequency(temp_dict_for_count_frequency)
+        frequency_for_print = count_frequency(real_rps_values)
         # Вывод частот полученных частот
         print ("Частоты полученных значений:", frequency_for_print)
 
