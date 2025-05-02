@@ -46,7 +46,6 @@ def check_load(metrika_for_determine_load, median):
     else:
         return "Дохуя стабильная"
 
-
 # цикл для коммуникации с пользователем
 def main():
        
@@ -88,27 +87,21 @@ def main():
             print("Среднее значение метрики среза:", avg_sliced_metrika)
             
             # считаем медианное значение для списка метрик среза 
-            temp_list_for_count_median = data_for_counting_sum
-            median = count_median(temp_list_for_count_median)
+            median = count_median(data_for_counting_sum)
             print ("Медианное значение метрики среза: ", median)
             
             # определяем, какая же была нагрузка
-            metrika_for_determine_load = avg_sliced_metrika
-            result = check_load(metrika_for_determine_load, median)
+            result = check_load(avg_sliced_metrika, median)
             print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
             break    
         elif user_metrika == "": # если пользовательского ввода не последовало - прерываем
-            
-            # считаем среднее значение
-            avg_metrika = 0 # среднее значение вычисляемое
-            
+                     
             # считаем среднее значение без среза
             avg_metrika = count_avg_metrika(real_rps_values)
             print("Среднее значение метрики без среза:", avg_metrika)
           
             # считаем медианное значение для обычного списка метрик (без среза)
-            temp_list_for_count_median = real_rps_values
-            median = count_median(temp_list_for_count_median)
+            median = count_median(real_rps_values)
             print ("Медианное значение метрики без среза: ", median)
 
             #Считаем частоты полученных значений (без среза)
@@ -117,8 +110,7 @@ def main():
             print ("Частоты полученных значений:", frequency_for_print)
 
             # определяем, какая же была нагрузка
-            metrika_for_determine_load = avg_metrika
-            result = check_load(metrika_for_determine_load, median)
+            result = check_load(avg_metrika, median)
             print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
             break      
         else: # если пользовательский ввод не валиден - сообщаем об этом
