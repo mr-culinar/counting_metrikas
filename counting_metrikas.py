@@ -1,28 +1,16 @@
-# TO DO: Оптимизации - переписать функции, обеспечить изоляцию
-# TO DO: реализовать main функцию
 # TO DO: try except
 
-
-# метрики от системы мониторинга (кортеж)
-rps_values = (5081, '17184', 10968, 9666, '9102', 12321, '10617', 11633, 5035, 9554, '10424', 9378, '8577', '11602', 14116, '8066', '11977', '8572', 9685, 11062, '10561', '17820', 16637, 5890, 17180, '17511', '13203', 13303, '7330', 7186, '10213', '8063', '12283', 15564, 17664, '8996', '12179', '13657', 15817, '16187', '6381', 8409, '5177', 17357, '10814', 6679, 12241, '6556', 12913, 16454, '17589', 5292, '13639', '7335', '11531', '14346', 7493, 15850, '12791', 11288)
-
-user_metrika = None # переменная пользовательского ввода
 temp_slices_list = [] # список для манипуляций с приведением пользовательского запроса на срез в числовой вид 
 sliced = [] # список для которого уже была применена операция среза
 left_slice = None # число, означающее левый срез
 right_slice = None # число, означающее правый срез
-temp_list_for_count_median = []
 
 # функция для преобразования кортежа в список с числами, возвращает список чисел
 def represent_tuple_as_int_list(rps_values):
     return [int (value) for value in rps_values]
 
-# инициализируем наш список функцией
-real_rps_values = represent_tuple_as_int_list(rps_values)
-print("Предустановленный список со значениями метрики:\n", real_rps_values) # вывод для проверки, что сформирован список с числами
-
 # функция для среза по пользовательскому вводу, возвращает список подтвергшийся операции среза
-def slice_list():
+def slice_list(real_rps_values):
     left_slice = temp_slices_list[0] # левый срез по индексу 0 из временного списка для среза
     right_slice = temp_slices_list[1] # правый срез по индексу 1 из временного списка для среза
     sliced = real_rps_values[left_slice:right_slice] # sliced = список подвергшийся операции среза, делаем срез и сохраняем в список sliced
@@ -58,78 +46,84 @@ def check_load(metrika_for_determine_load, median):
     else:
         return "Дохуя стабильная"
 
+
 # цикл для коммуникации с пользователем
-while True:
-    print("")
-    print("Введите число в формате 123 для добавления одного числа \nВведите числа в формате 123;123;123;123 для добавления нескольких чисел \nВведите срез в формате [12, 52] для операции среза по подготовленному списку \nНажмите Enter для подсчета и выхода")
-    user_metrika = input() # пользовательский ввод в консоль
-    # если пользователь вводит число
-    if user_metrika.isdigit(): # проверка на число
-        real_rps_values.append(int(user_metrika)) # приведение к int
-        print(f"Ввели число {user_metrika} - записали")
-        print(f"Теперь список выглядит так: {real_rps_values}")
-    # если значения передаются пакетным способом через ";" - 123;123;123;123;123;123...
-    elif ";" in user_metrika: 
-        real_rps_values.extend(map(int, user_metrika.split(";"))) # разделяем ввод на числа через ; и добавляем к real_rps_values
-        print(f"Пакетный ввод такой {user_metrika} - записали")
-        print(f"Теперь список выглядит так: {real_rps_values}")
-    # если на вход в программу поступит следующая структура: # [число, число] Например, [17, 52], то необходимо произвести срез по указанным индексам (левая и правая граница, соответственно) 
-    elif "," in user_metrika: # если пользователь просит сделать срез
-        temp_slices_list.extend(map(int, user_metrika.strip("[]").split(","))) # убираем [] из строки, разделяем числа через ",", добавляем в список условий для среза, предварительно приведя к int
-        
-        #задаем в переменные значения в список полученные через вызов функции подготовки списка со срезом 
-        data_for_counting_sum = slice_list()
+def main():
        
-        #задаем частоты полученных значений
-        sliced_frequency_for_print = count_frequency(data_for_counting_sum)
-        print(f"Список значений метрик после среза выглядит вот так {data_for_counting_sum }")
-        print(f"Список частот после среза выглядит вот так {sliced_frequency_for_print}")     
-        
-        #задаем в список значения среза для средней метрики из функции
-        avg_sliced_metrika = count_avg_metrika(data_for_counting_sum)
-        print("Среднее значение метрики среза:", avg_sliced_metrika)
-        
-        # считаем медианное значение для списка метрик среза 
-        temp_list_for_count_median = data_for_counting_sum
-        median = count_median(temp_list_for_count_median)
-        print ("Медианное значение метрики среза: ", median)
-        
-        # определяем, какая же была нагрузка
-        metrika_for_determine_load = avg_sliced_metrika
-        result = check_load(metrika_for_determine_load, median)
-        print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
-        break    
-    elif user_metrika == "": # если пользовательского ввода не последовало - прерываем
-        
-        # считаем среднее значение
-        avg_metrika = 0 # среднее значение вычисляемое
-        sum_avg_metrika = 0 # сумма для расчета среднего значения
-        
-        # считаем среднее значение без среза
-      #  data_for_counting_sum = real_rps_values
-        avg_metrika = count_avg_metrika(real_rps_values)
-        print("Среднее значение метрики без среза:", avg_metrika)
+    # метрики от системы мониторинга (кортеж)
+    rps_values = (5081, '17184', 10968, 9666, '9102', 12321, '10617', 11633, 5035, 9554, '10424', 9378, '8577', '11602', 14116, '8066', '11977', '8572', 9685, 11062, '10561', '17820', 16637, 5890, 17180, '17511', '13203', 13303, '7330', 7186, '10213', '8063', '12283', 15564, 17664, '8996', '12179', '13657', 15817, '16187', '6381', 8409, '5177', 17357, '10814', 6679, 12241, '6556', 12913, 16454, '17589', 5292, '13639', '7335', '11531', '14346', 7493, 15850, '12791', 11288)
 
-       # avg_metrika = count_avg_metrika(data_for_counting_sum)
-        #print("Среднее значение метрики без среза:", avg_metrika)
+    # преобразовываем наш список из кортежа функцией
+    real_rps_values = represent_tuple_as_int_list(rps_values)
+    print("Предустановленный список со значениями метрики:\n", real_rps_values) # вывод для проверки, что сформирован список с числами
+
+    while True:
+        print("")
+        print("Введите число в формате 123 для добавления одного числа \nВведите числа в формате 123;123;123;123 для добавления нескольких чисел \nВведите срез в формате [12, 52] для операции среза по подготовленному списку \nНажмите Enter для подсчета и выхода")
+        user_metrika = input() # пользовательский ввод в консоль
+        # если пользователь вводит число
+        if user_metrika.isdigit(): # проверка на число
+            real_rps_values.append(int(user_metrika)) # приведение к int
+            print(f"Ввели число {user_metrika} - записали")
+            print(f"Теперь список выглядит так: {real_rps_values}")
+        # если значения передаются пакетным способом через ";" - 123;123;123;123;123;123...
+        elif ";" in user_metrika: 
+            real_rps_values.extend(map(int, user_metrika.split(";"))) # разделяем ввод на числа через ; и добавляем к real_rps_values
+            print(f"Пакетный ввод такой {user_metrika} - записали")
+            print(f"Теперь список выглядит так: {real_rps_values}")
+        # если на вход в программу поступит следующая структура: # [число, число] Например, [17, 52], то необходимо произвести срез по указанным индексам (левая и правая граница, соответственно) 
+        elif "," in user_metrika: # если пользователь просит сделать срез
+            temp_slices_list.extend(map(int, user_metrika.strip("[]").split(","))) # убираем [] из строки, разделяем числа через ",", добавляем в список условий для среза, предварительно приведя к int
+            
+            #задаем в переменные значения в список полученные через вызов функции подготовки списка со срезом 
+            data_for_counting_sum = slice_list(real_rps_values)
         
-        # считаем медианное значение для обычного списка метрик (без среза)
-        temp_list_for_count_median = real_rps_values
-        median = count_median(temp_list_for_count_median)
-        print ("Медианное значение метрики без среза: ", median)
+            #задаем частоты полученных значений
+            sliced_frequency_for_print = count_frequency(data_for_counting_sum)
+            print(f"Список значений метрик после среза выглядит вот так {data_for_counting_sum }")
+            print(f"Список частот после среза выглядит вот так {sliced_frequency_for_print}")     
+            
+            #задаем в список значения среза для средней метрики из функции
+            avg_sliced_metrika = count_avg_metrika(data_for_counting_sum)
+            print("Среднее значение метрики среза:", avg_sliced_metrika)
+            
+            # считаем медианное значение для списка метрик среза 
+            temp_list_for_count_median = data_for_counting_sum
+            median = count_median(temp_list_for_count_median)
+            print ("Медианное значение метрики среза: ", median)
+            
+            # определяем, какая же была нагрузка
+            metrika_for_determine_load = avg_sliced_metrika
+            result = check_load(metrika_for_determine_load, median)
+            print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
+            break    
+        elif user_metrika == "": # если пользовательского ввода не последовало - прерываем
+            
+            # считаем среднее значение
+            avg_metrika = 0 # среднее значение вычисляемое
+            
+            # считаем среднее значение без среза
+            avg_metrika = count_avg_metrika(real_rps_values)
+            print("Среднее значение метрики без среза:", avg_metrika)
+          
+            # считаем медианное значение для обычного списка метрик (без среза)
+            temp_list_for_count_median = real_rps_values
+            median = count_median(temp_list_for_count_median)
+            print ("Медианное значение метрики без среза: ", median)
 
-        #Считаем частоты полученных значений (без среза)
-        frequency_for_print = count_frequency(real_rps_values)
-        # Вывод частот полученных частот
-        print ("Частоты полученных значений:", frequency_for_print)
+            #Считаем частоты полученных значений (без среза)
+            frequency_for_print = count_frequency(real_rps_values)
+            # Вывод частот полученных частот
+            print ("Частоты полученных значений:", frequency_for_print)
 
-        # определяем, какая же была нагрузка
-        metrika_for_determine_load = avg_metrika
-        result = check_load(metrika_for_determine_load, median)
-        print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
-        break      
-    else: # если пользовательский ввод не валиден - сообщаем об этом
-            print("Валидация не пройдена, используйте числа") 
-            print (f"Список состои из {real_rps_values}")
+            # определяем, какая же была нагрузка
+            metrika_for_determine_load = avg_metrika
+            result = check_load(metrika_for_determine_load, median)
+            print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
+            break      
+        else: # если пользовательский ввод не валиден - сообщаем об этом
+                print("Валидация не пройдена, используйте числа") 
+                print (f"Список состои из {real_rps_values}")
 
-
+if __name__ == "__main__":
+    main()
