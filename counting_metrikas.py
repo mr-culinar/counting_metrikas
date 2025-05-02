@@ -1,17 +1,13 @@
 # TO DO: try except
 
-temp_slices_list = [] # список для манипуляций с приведением пользовательского запроса на срез в числовой вид 
-
 # функция для преобразования кортежа в список с числами, возвращает список чисел
 def represent_tuple_as_int_list(rps_values):
     return [int (value) for value in rps_values]
 
 # функция для среза по пользовательскому вводу, возвращает список подтвергшийся операции среза
-def slice_list(real_rps_values):
-    left_slice = temp_slices_list[0] # левый срез по индексу 0 из временного списка для среза
-    right_slice = temp_slices_list[1] # правый срез по индексу 1 из временного списка для среза
-    sliced = real_rps_values[left_slice:right_slice] # sliced = список подвергшийся операции среза, делаем срез и сохраняем в список sliced
-    return sliced
+def slice_list(real_rps_values, slices):
+    left, right = slices
+    return real_rps_values[left:right]
 
 # функция для подсчета среднего значения на полученном спсике метрики со срезом и без среза
 def count_avg_metrika(data_for_counting_sum):
@@ -69,10 +65,10 @@ def main():
             print(f"Теперь список выглядит так: {real_rps_values}")
         # если на вход в программу поступит следующая структура: # [число, число] Например, [17, 52], то необходимо произвести срез по указанным индексам (левая и правая граница, соответственно) 
         elif "," in user_metrika: # если пользователь просит сделать срез
-            temp_slices_list.extend(map(int, user_metrika.strip("[]").split(","))) # убираем [] из строки, разделяем числа через ",", добавляем в список условий для среза, предварительно приведя к int
+            slices = list(map(int, user_metrika.strip("[]").split(","))) # убираем [] из строки, разделяем числа через ",", добавляем в список условий для среза, предварительно приведя к int
             
             #задаем в переменные значения в список полученные через вызов функции подготовки списка со срезом 
-            data_for_counting_sum = slice_list(real_rps_values)
+            data_for_counting_sum = slice_list(real_rps_values, slices)
         
             #задаем частоты полученных значений
             sliced_frequency_for_print = count_frequency(data_for_counting_sum)
