@@ -5,7 +5,16 @@ def represent_tuple_as_int_list(rps_values):
 # функция для среза по пользовательскому вводу, возвращает список подтвергшийся операции среза
 def slice_list(real_rps_values, slices):
         left, right = slices
-        return real_rps_values[left:right]
+        if left == right:
+            print("Левая и правая граница среза не могут быть одинаковыми")
+        if left > right:
+            print("Левая граница не может быть больше правой")
+        if left < 0:
+            print("Левая граница не может быть отрицательным")
+        if right < 0:
+            print("Правая граница не может быть отрицательным")
+        else: 
+            return real_rps_values[left:right]
                       
     
 # функция для подсчета среднего значения на полученном спсике метрики со срезом и без среза
@@ -75,7 +84,7 @@ def main():
                         
                         #задаем в переменные значения в список полученные через вызов функции подготовки списка со срезом 
                         data_for_counting_sum = slice_list(real_rps_values, slices)
-                    
+                                            
                         #задаем частоты полученных значений
                         sliced_frequency_for_print = count_frequency(data_for_counting_sum)
                         print(f"Список значений метрик после среза выглядит вот так {data_for_counting_sum }")
