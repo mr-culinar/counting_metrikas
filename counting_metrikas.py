@@ -28,7 +28,7 @@ def count_avg_metrika(data_for_counting_sum):
         avg_sliced_metrika = sum(data_for_counting_sum) / len(data_for_counting_sum) # считаем среднее значение списка метрик со срезом
         return avg_sliced_metrika
     
-# считаем частоты полученных значений
+# считаем частоты полученных значений, заполняем словарь через Counter
 def count_frequency(data_for_count_frequency):
     return dict(Counter(data_for_count_frequency))
 
