@@ -1,5 +1,5 @@
 from collections import Counter
-
+#даня жопа
 # функция для преобразования кортежа в список с числами, возвращает список чисел
 def represent_tuple_as_int_list(rps_values):
         return [int (value) for value in rps_values]
