@@ -1,34 +1,20 @@
-# TO DO: try except
-
 # функция для преобразования кортежа в список с числами, возвращает список чисел
 def represent_tuple_as_int_list(rps_values):
-    try:
         return [int (value) for value in rps_values]
-    except (TypeError, ValueError) as e:
-        print(f"Ошибка преобразования кортежа в список с числами {e}")
-        return []
-
+    
 # функция для среза по пользовательскому вводу, возвращает список подтвергшийся операции среза
 def slice_list(real_rps_values, slices):
-    try:
         left, right = slices
         return real_rps_values[left:right]
-    except (TypeError, ValueError) as e:
-        print(f"Ошибка подсчета среза {e}")
-        return real_rps_values
+    
 
 # функция для подсчета среднего значения на полученном спсике метрики со срезом и без среза
 def count_avg_metrika(data_for_counting_sum):
-    try: 
         avg_sliced_metrika = sum(data_for_counting_sum) / len(data_for_counting_sum) # считаем среднее значение списка метрик со срезом
         return avg_sliced_metrika
-    except (TypeError, ZeroDivisionError) as e:
-        print (f"Ошибка при подсчете суммы {e}")
-        return 0
-
+    
 # считаем частоты полученных значений
 def count_frequency(data_for_count_frequency):
-    try:
         frequency = {}
         for value in data_for_count_frequency: # для каждого элемента списка real_rps_values
             if value in frequency: # проверка для каждого значения словаря
@@ -36,33 +22,22 @@ def count_frequency(data_for_count_frequency):
             else:
                 frequency[value] = 1 # если отсутствует в словаре - добавляем ключ и ставим единицу как кол-во вхождений
         return frequency
-    except TypeError as e:
-        print(f"Ошибка при подсчете частот {e}")
-        return frequency
-
+    
 # считаем медианное значение для списка метрик (для обычного и для среза)
 def count_median(temp_list_for_count_median):
-    try:
         quotient, remainder = divmod(len(temp_list_for_count_median), 2)
         median = temp_list_for_count_median[quotient] if remainder else sum(temp_list_for_count_median[quotient - 1:quotient + 1]) / 2
         return median
-    except (TypeError, ZeroDivisionError) as e:
-        print(f"Ошибка при подсчете медианы {e}")
-        return 0
-
+    
 # принимаем решение, какая же была нагрузка
 def check_load(metrika_for_determine_load, median):
-    try:
         if metrika_for_determine_load >= median * 1.25:
             return "Ебучие скачки"
         elif metrika_for_determine_load <= median * 0.75:
             return "Охуительные снижения"
         else:
             return "Дохуя стабильная"
-    except TypeError as e:
-        print(f"Ошибка определения умной нагрузки {e}")
-        return "Ошибка определения умной нагрузки"
-
+    
 
 # цикл для коммуникации с пользователем
 def main():
@@ -75,7 +50,6 @@ def main():
         print("Предустановленный список со значениями метрики:\n", real_rps_values) # вывод для проверки, что сформирован список с числами
 
         while True:
-            print("")
             print("Введите число в формате 123 для добавления одного числа \nВведите числа в формате 123;123;123;123 для добавления нескольких чисел \nВведите срез в формате [12, 52] для операции среза по подготовленному списку \nНажмите Enter для подсчета и выхода")
             user_metrika = input() # пользовательский ввод в консоль
             # если пользователь вводит число
