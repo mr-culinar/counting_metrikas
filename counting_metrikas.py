@@ -6,20 +6,7 @@ def represent_tuple_as_int_list(rps_values):
 def slice_list(real_rps_values, slices):
         left, right = slices
         return real_rps_values[left:right]
-
-#валидация пользовательского ввода на то что подается список
-def validate_input(input_data):
-        if not (input_data.startswith('[') and input_data.endswith(']')):
-             print("Пользак рукожоп, формат ввода должен быть - [число, число]")
-             return False
-        else: 
-            return input_data
-        #parts = input_data[1:-1].split(',')
-        #if len(parts) != 2:
-        #    return False
-        #return all(part.strip().isdigit() for part in parts)
-
-                       
+                      
     
 # функция для подсчета среднего значения на полученном спсике метрики со срезом и без среза
 def count_avg_metrika(data_for_counting_sum):
@@ -80,32 +67,35 @@ def main():
                     except ValueError as e:
                         print(f"Ошибка в пакетном вводе {e}, используйте формат чисел разделенных ';'")   
                 # если на вход в программу поступит следующая структура: # [число, число] Например, [17, 52], то необходимо произвести срез по указанным индексам (левая и правая граница, соответственно) 
-                elif "," in user_metrika: # если пользователь просит сделать срез
+                elif (user_metrika.startswith('[') and user_metrika.endswith(']')): # если пользователь просит сделать срез
+            
                     try:
-                        if not validate_input(user_metrika):
-                             return None
-                        slices = list(map(int, user_metrika.strip("[]").split(","))) # убираем [] из строки, разделяем числа через ",", добавляем в список условий для среза, предварительно приведя к int
-                        
-                        #задаем в переменные значения в список полученные через вызов функции подготовки списка со срезом 
-                        data_for_counting_sum = slice_list(real_rps_values, slices)
+                        if len(user_metrika) != 2:
                     
-                        #задаем частоты полученных значений
-                        sliced_frequency_for_print = count_frequency(data_for_counting_sum)
-                        print(f"Список значений метрик после среза выглядит вот так {data_for_counting_sum }")
-                        print(f"Список частот после среза выглядит вот так {sliced_frequency_for_print}")     
+                            slices = list(map(int, user_metrika.strip("[]").split(","))) # убираем [] из строки, разделяем числа через ",", добавляем в список условий для среза, предварительно приведя к int
+                            
+                            #задаем в переменные значения в список полученные через вызов функции подготовки списка со срезом 
+                            data_for_counting_sum = slice_list(real_rps_values, slices)
                         
-                        #задаем в список значения среза для средней метрики из функции
-                        avg_sliced_metrika = count_avg_metrika(data_for_counting_sum)
-                        print("Среднее значение метрики среза:", avg_sliced_metrika)
-                        
-                        # считаем медианное значение для списка метрик среза 
-                        median = count_median(data_for_counting_sum)
-                        print ("Медианное значение метрики среза: ", median)
-                        
-                        # определяем, какая же была нагрузка
-                        result = check_load(avg_sliced_metrika, median)
-                        print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
-                        break    
+                            #задаем частоты полученных значений
+                            sliced_frequency_for_print = count_frequency(data_for_counting_sum)
+                            print(f"Список значений метрик после среза выглядит вот так {data_for_counting_sum }")
+                            print(f"Список частот после среза выглядит вот так {sliced_frequency_for_print}")     
+                            
+                            #задаем в список значения среза для средней метрики из функции
+                            avg_sliced_metrika = count_avg_metrika(data_for_counting_sum)
+                            print("Среднее значение метрики среза:", avg_sliced_metrika)
+                            
+                            # считаем медианное значение для списка метрик среза 
+                            median = count_median(data_for_counting_sum)
+                            print ("Медианное значение метрики среза: ", median)
+                            
+                            # определяем, какая же была нагрузка
+                            result = check_load(avg_sliced_metrika, median)
+                            print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
+                            break    
+                        else:
+                            print("Нельзя выполнять срез по одному числу, используйте формат [число, число]")
                     except ValueError as e:
                         print(f"Ошибка при обработке среза {e}. Используйте формат [число, число]")
                 elif user_metrika == "": # если пользовательского ввода не последовало - прерываем
@@ -128,7 +118,7 @@ def main():
                     print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
                     break      
                 else: # если пользовательский ввод не валиден - сообщаем об этом
-                        print("Пользак, ты балбес - валидация не пройдена, используй числа") 
+                        print("Пользак, ты балбес - валидация не пройдена, используй числа или срез в формате [число, число]") 
                         print (f"Список состои из {real_rps_values}")
             except Exception as e:
                 print(f"Пользак балбес - ошибка при вычислениях {e}, делить на ноль нельзя")
