@@ -66,8 +66,7 @@ def main():
             try:                
                 if user_metrika.isdigit(): # проверка на число
                     real_rps_values.append(int(user_metrika)) # приведение к int
-                    print(f"Ввели число {user_metrika} - записали")
-                    print(f"Теперь список выглядит так: {real_rps_values}")
+                    print(f"Ввели число {user_metrika} - записали \nТеперь список выглядит так: {real_rps_values}")
                 # если значения передаются пакетным способом через ";" - 123;123;123;123;123;123...
                 elif ";" in user_metrika: 
                     try:
@@ -76,8 +75,7 @@ def main():
                              print("Числа передаваемые пакетным способом не могут быть отрицательными")
                         else:
                             real_rps_values.extend(numbers) # разделяем ввод на числа через ; и добавляем к real_rps_values
-                            print(f"Пакетный ввод такой {user_metrika} - записали")
-                            print(f"Теперь список выглядит так: {real_rps_values}")
+                            print(f"Пакетный ввод такой {user_metrika} - записали \nТеперь список выглядит так: {real_rps_values}")
                     except ValueError as e:
                         print(f"Ошибка в пакетном вводе {e}, используйте формат чисел разделенных ';'")   
                 # если на вход в программу поступит следующая структура: # [число, число] Например, [17, 52], то необходимо произвести срез по указанным индексам (левая и правая граница, соответственно) 
@@ -92,8 +90,7 @@ def main():
                                             
                         #задаем частоты полученных значений
                         sliced_frequency_for_print = count_frequency(data_for_counting_sum)
-                        print(f"Список значений метрик после среза выглядит вот так {data_for_counting_sum }")
-                        print(f"Список частот после среза выглядит вот так {sliced_frequency_for_print}")     
+                        print(f"Список значений метрик после среза выглядит вот так {data_for_counting_sum }\n Список частот после среза выглядит вот так {sliced_frequency_for_print}")
                         
                         #задаем в список значения среза для средней метрики из функции
                         avg_sliced_metrika = count_avg_metrika(data_for_counting_sum)
@@ -129,8 +126,7 @@ def main():
                     print ("Умная система определения нагрузки определила характер нагрузки как:\n", result)
                     break      
                 else: # если пользовательский ввод не валиден - сообщаем об этом
-                        print("Пользак, ты балбес - валидация не пройдена, используй числа или срез в формате [число, число]") 
-                        print (f"Список состои из {real_rps_values}")
+                        print("Пользак, ты балбес - валидация не пройдена, используй числа или срез в формате [число, число]\nСписок состоит из {real_rps_values}") 
             except Exception as e:
                 print(f"Пользак балбес - ошибка при вычислениях {e}, делить на ноль нельзя")
     except Exception as e:
