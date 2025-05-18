@@ -13,8 +13,11 @@ def slice_list(real_rps_values, slices):
         if left > right:
             print("Левая граница не может быть больше правой")
             return None
+        if right-left == 1:
+             print("Срезать по единственному числу нельзя, иначе нахера второе подаешь! пиши [число, число]")
+             return None
         if left < 0 or right < 0:
-            print("Границы не могут быть отрицательным")
+            print("Границы среза не могут быть отрицательным")
             return None
 
         return real_rps_values[left:right]
