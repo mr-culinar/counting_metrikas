@@ -1,3 +1,5 @@
+from collections import Counter
+
 # функция для преобразования кортежа в список с числами, возвращает список чисел
 def represent_tuple_as_int_list(rps_values):
         return [int (value) for value in rps_values]
@@ -24,20 +26,15 @@ def count_avg_metrika(data_for_counting_sum):
     
 # считаем частоты полученных значений
 def count_frequency(data_for_count_frequency):
-        frequency = {}
-        for value in data_for_count_frequency: # для каждого элемента списка real_rps_values
-            if value in frequency: # проверка для каждого значения словаря
-                frequency[value] += 1 # если есть в словаре - добавляем ключ и плюсуем единицу (считаем кол-во вхождений)
-            else:
-                frequency[value] = 1 # если отсутствует в словаре - добавляем ключ и ставим единицу как кол-во вхождений
-        return frequency
-    
+    return dict(Counter(data_for_count_frequency))
+
 # считаем медианное значение для списка метрик (для обычного и для среза)
 def count_median(temp_list_for_count_median):
         quotient, remainder = divmod(len(temp_list_for_count_median), 2)
         median = temp_list_for_count_median[quotient] if remainder else sum(temp_list_for_count_median[quotient - 1:quotient + 1]) / 2
         return median
-    
+
+
 # принимаем решение, какая же была нагрузка
 def check_load(metrika_for_determine_load, median):
         if metrika_for_determine_load >= median * 1.25:
