@@ -30,12 +30,13 @@ def count_avg_metrika(data_for_counting_sum):
     
 # считаем частоты полученных значений, заполняем словарь через Counter
 def count_frequency(data_for_count_frequency):
-    return dict(Counter(data_for_count_frequency))
+        return dict(Counter(data_for_count_frequency))
 
 # считаем медианное значение для списка метрик (для обычного и для среза)
 def count_median(temp_list_for_count_median):
-        quotient, remainder = divmod(len(temp_list_for_count_median), 2)
-        median = temp_list_for_count_median[quotient] if remainder else sum(temp_list_for_count_median[quotient - 1:quotient + 1]) / 2
+        sorted_list_for_count_median = sorted(temp_list_for_count_median)
+        quotient, remainder = divmod(len(sorted_list_for_count_median), 2)
+        median = sorted_list_for_count_median[quotient] if remainder else sum(sorted_list_for_count_median[quotient - 1:quotient + 1]) / 2
         return median
 
 
