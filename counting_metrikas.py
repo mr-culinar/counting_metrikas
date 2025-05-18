@@ -7,11 +7,11 @@ def slice_list(real_rps_values, slices):
         left, right = slices
         if left == right:
             print("Левая и правая граница среза не могут быть одинаковыми")
-        if left > right:
+        elif left > right:
             print("Левая граница не может быть больше правой")
-        if left < 0:
+        elif left < 0:
             print("Левая граница не может быть отрицательным")
-        if right < 0:
+        elif right < 0:
             print("Правая граница не может быть отрицательным")
         else: 
             return real_rps_values[left:right]
