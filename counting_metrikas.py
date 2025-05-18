@@ -9,14 +9,15 @@ def slice_list(real_rps_values, slices):
         left, right = slices
         if left == right:
             print("Левая и правая граница среза не могут быть одинаковыми")
-        elif left > right:
+            return None
+        if left > right:
             print("Левая граница не может быть больше правой")
-        elif left < 0:
-            print("Левая граница не может быть отрицательным")
-        elif right < 0:
-            print("Правая граница не может быть отрицательным")
-        else: 
-            return real_rps_values[left:right]
+            return None
+        if left < 0 or right < 0:
+            print("Границы не могут быть отрицательным")
+            return None
+
+        return real_rps_values[left:right]
                       
     
 # функция для подсчета среднего значения на полученном спсике метрики со срезом и без среза
